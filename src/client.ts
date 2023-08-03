@@ -27,7 +27,7 @@ export class Client {
     this.#cluster = options.cluster;
   }
 
-  async function findOne<T extends Document>(options: <{ db: string; collection: string; filter: Filter<T>; projection?: Document }>): Promise<T | undefined> {
+  async function findOne(options: <{ db: string; collection: string; filter: Filter<T>; projection?: Document }>): Promise<T | undefined> {
     const data = {
       dataSource: this.#cluster,
       database: options.db,
@@ -46,7 +46,7 @@ export class Client {
     return response.document;
   }
 
-  async function find<T extends Document>(options: <{ db: string; collection: string; filter: Filter<T>; projection?: Document; sort?: Document; limit?: number; skip?: number }>): Promise<T[]> {
+  async function find(options: <{ db: string; collection: string; filter: Filter<T>; projection?: Document; sort?: Document; limit?: number; skip?: number }>): Promise<T[]> {
     const data = {
       dataSource: this.#cluster,
       database: options.db,
