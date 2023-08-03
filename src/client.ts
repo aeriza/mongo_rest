@@ -58,7 +58,7 @@ export class Client {
       skip: options.skip
     };
 
-    const request = await fetch(this.#baseUrl + "/action/findOne", {
+    const request = await fetch(this.#baseUrl + "/action/find", {
       headers: this.#baseHeaders,
       method: "POST",
       body: JSON.stringify(data)
