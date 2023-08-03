@@ -40,4 +40,4 @@ jobs:
       #   run: deno fmt --check
 
       - name: Run tests
-        run: deno run -A test.ts
+        run: deno run -A --check test.ts
