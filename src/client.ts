@@ -1,5 +1,6 @@
 import type {
-  Document
+  Document,
+  Filter
 } from "../deps.ts";
 
 export interface ClientOptions {
@@ -14,7 +15,6 @@ export class Client {
   #baseHeaders: Headers;
   #baseUrl: string;
   #cluster: string;
-  defaultDatabase?: string;
   
   constructor(options: ClientOptions) {
     this.#apiKey = options.apiKey;
@@ -24,7 +24,9 @@ export class Client {
       "content-type": "application/json"
     });
     this.#cluster = options.cluster;
+  }
 
-    if ("defaultDatabase" in options) this.defaultDatabase = options.defaultDatabase;
+  async function findOne<T extends Document>(options: <{ db: string; collection: string; filter: Filter<T>; projection: Document }>): Promise<T | undefined> {
+    
   }
 }
