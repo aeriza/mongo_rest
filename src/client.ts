@@ -32,10 +32,9 @@ export class Client {
       dataSource: this.#cluster,
       database: options.db,
       collection: options.collection,
-      filter: options.filter
+      filter: options.filter,
+      projection: options.projection
     };
-
-    if ("projections" in options) data.projection = options.projection;
 
     const request = await fetch(this.#baseUrl + "/action/findOne", {
       headers: this.#baseHeaders,
@@ -45,5 +44,27 @@ export class Client {
     const response = await request.json();
 
     return response.document;
+  }
+
+  async function find<T extends Document>(options: <{ db: string; collection: string; filter: Filter<T>; projection?: Document; sort?: Document; limit?: number; skip?: number }>): Promise<T[]> {
+    const data = {
+      dataSource: this.#cluster,
+      database: options.db,
+      collection: options.collection,
+      filter: options.filter,
+      projection: options.projection,
+      sort: options.sort,
+      limit: options.limit,
+      skip: options.skip
+    };
+
+    const request = await fetch(this.#baseUrl + "/action/findOne", {
+      headers: this.#baseHeaders,
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    const response = await request.json();
+
+    return response.documents;
   }
 }
