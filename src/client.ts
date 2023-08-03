@@ -21,12 +21,28 @@ export class Client {
     this.#baseUrl = options.baseUrl instanceof URL ? options.baseUrl.toString() : options.baseUrl;
     this.#baseHeaders = new Headers({
       "access-control-request-headers": "*",
+      "apiKey": this.#apiKey,
       "content-type": "application/json"
     });
     this.#cluster = options.cluster;
   }
 
   async function findOne<T extends Document>(options: <{ db: string; collection: string; filter: Filter<T>; projection: Document }>): Promise<T | undefined> {
-    
+    const data = {
+      dataSource: this.#cluster,
+      database: options.db,
+      collection: options.collection,
+      filter: options.filter,
+      projection: options.projection
+    };
+
+    const request = await fetch(this.#baseUrl + "/action/findOne", {
+      headers: this.#baseHeaders,
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    const response = await request.json();
+
+    return response.document;
   }
 }
