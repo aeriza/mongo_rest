@@ -22,7 +22,7 @@ export class Client {
     this.baseUrl = options.baseUrl instanceof URL ? options.baseUrl.toString() : options.baseUrl;
     this.#baseHeaders = new Headers({
       "access-control-request-headers": "*",
-      "apiKey": this.#apiKey,
+      "apiKey": this.apiKey,
       "content-type": "application/json"
     });
     this.cluster = options.cluster;
