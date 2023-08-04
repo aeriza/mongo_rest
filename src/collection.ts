@@ -56,6 +56,7 @@ export class Collection<T extends Document> {
     console.log(request);
     
     const response = await request.json();
+    console.log(response);
     
     if ([400, 401].includes(request.status)) {
       throw new Error(response.error)
