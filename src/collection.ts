@@ -1,4 +1,4 @@
-import type {
+ import type {
   Client
 } from "./client.ts";
 import type {
@@ -15,6 +15,12 @@ export interface BaseRequestBody {
 export interface CreateCollectionOptions {
   dbName: string;
   name: string;
+}
+
+export interface FindOptions {
+  skip?: number;
+  limit?: number;
+  projection?: Document;
 }
 
 export class Collection<T extends Document> {
@@ -58,11 +64,20 @@ export class Collection<T extends Document> {
     return response;
   }
 
-  async findOne(filter: Filter<T>, projection?: Document): Promise<T | null> {
-    const data = await this.#request("findOne", {
-      filter, projection
+  async findMany(filter: Filter<T>, options?: FindOptions): Promise<T[]> {
+    const data = await this.#request("findMany", {
+      filter, projection, skip: options.skip, limit: options.limit, projection: options.projection
     });
 
-    return data.document ?? null;
+    return data.documents;
+  }
+
+  async findOne(filter: Filter<T>, projection?: Document): Promise<T | null> {
+    // const data = await this.#request("findOne", {
+    //  filter, projection
+    // });
+    const data = await this.findMany(filter, { projection });
+
+    return data.documents[0] ?? null;
   }
 }
