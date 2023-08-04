@@ -17,7 +17,7 @@ export class Collection<T extends Document> {
 
   constructor(client: Client, options: CreateCollectionOptions) {
     this.#client = client;
-    this.#dbName = options.dbName ?? client.defaultDB;
+    this.#dbName = options.dbName ?? client.defaultDb;
     this.#name = options.name;
   }
 
