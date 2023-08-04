@@ -34,8 +34,7 @@ export class Client {
   }
 
   createCollection<T extends Document>(database: string, name: string): Collection<T> {
-    return new Collection<T>({
-      client: this,
+    return new Collection<T>(this, {
       dbName: database,
       collection: name
     });
