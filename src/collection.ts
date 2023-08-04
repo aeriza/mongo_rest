@@ -5,6 +5,12 @@ import type {
   Document
 } from "../deps.ts";
 
+export interface BaseRequestBody {
+  dataSource: string;
+  database: string;
+  collection: string;
+}
+
 export interface CreateCollectionOptions {
   dbName: string;
   name: string;
@@ -25,7 +31,7 @@ export class Collection<T extends Document> {
     path: string, 
     data: unknown
   ): Promise<any> {
-    const rawData = {
+    const rawData: BaseRequestBody = {
       dataSource: this.#client.cluster,
       database: this.dbName,
       collection: this.name
