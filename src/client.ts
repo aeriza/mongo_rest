@@ -11,10 +11,10 @@ export interface ClientOptions {
 }
 
 export class Client {
-  #apiKey: string;
   #baseHeaders: Headers;
-  #baseUrl: string;
-  #cluster: string;
+  readonly apiKey: string;
+  readonly baseUrl: string;
+  readonly cluster: string;
   readonly defaultDb?: string;
   
   constructor(options: ClientOptions) {
