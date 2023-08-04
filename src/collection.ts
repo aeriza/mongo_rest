@@ -59,7 +59,7 @@ export class Collection<T extends Document> {
   }
 
   async findOne(filter: Filter<T>, projection?: Document): Promise<T | null> {
-    const data = await this.#request("/findOne", {
+    const data = await this.#request("findOne", {
       filter, projection
     });
 
