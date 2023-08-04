@@ -2,6 +2,9 @@ import type {
   Document,
   Filter
 } from "../deps.ts";
+import {
+  Collection
+} from "./collection.ts";
 
 export interface ClientOptions {
   apiKey: string;
@@ -28,6 +31,14 @@ export class Client {
     this.cluster = options.cluster;
 
     if ("defaultDatabase" in options) this.defaultDb = options.defaultDatabase;
+  }
+
+  createCollection<T extends Document>(database: string, name: string): Collection<T> {
+    return new Collection<T>({
+      client: this,
+      dbName: database,
+      collection: name
+    });
   }
 
   async findOne<T extends Document>(options: { db: string; collection: string; filter: Filter<T>; projection?: Document }): Promise<T | undefined> {
