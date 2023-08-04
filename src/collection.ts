@@ -23,7 +23,7 @@ export class Collection<T extends Document> {
 
   constructor(client: Client, options: CreateCollectionOptions) {
     this.#client = client;
-    this.#dbName = options.dbName ?? client.defaultDb;
+    this.#dbName = options.dbName
     this.#name = options.name;
   }
 
