@@ -1,4 +1,4 @@
- import type {
+import type {
   Client
 } from "./client.ts";
 import type {
@@ -39,7 +39,6 @@ export class Collection<T extends Document> {
     path: string, 
     data: unknown
   ): Promise<any> {
-    console.log(data);
     const rawData: BaseRequestBody = {
       dataSource: this.#client.cluster,
       database: this.#dbName,
@@ -55,10 +54,8 @@ export class Collection<T extends Document> {
       method: "POST",
       body: JSON.stringify(Object.assign(rawData, data))
     });
-    console.log(request);
     
     const response = await request.json();
-    console.log(response);
     
     if ([400, 401].includes(request.status)) {
       throw new Error(response.error)
@@ -68,15 +65,12 @@ export class Collection<T extends Document> {
   }
 
   async findMany(filter: Filter<T>, options?: FindOptions): Promise<T[]> {
-    const data = await this.#request("find", Object.assign({ filter }, options ?? {}));
+    const data = await this.#request("find", Object.assign({ filter }, options));
 
     return data.documents;
   }
 
   async findOne(filter: Filter<T>, projection?: Document): Promise<T | null> {
-    // const data = await this.#request("findOne", {
-    //  filter, projection
-    // });
     const documents = await this.findMany(filter, { projection });
 
     return documents[0] ?? null;
