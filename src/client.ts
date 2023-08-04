@@ -18,28 +18,28 @@ export class Client {
   readonly defaultDb?: string;
   
   constructor(options: ClientOptions) {
-    this.#apiKey = options.apiKey;
-    this.#baseUrl = options.baseUrl instanceof URL ? options.baseUrl.toString() : options.baseUrl;
+    this.apiKey = options.apiKey;
+    this.baseUrl = options.baseUrl instanceof URL ? options.baseUrl.toString() : options.baseUrl;
     this.#baseHeaders = new Headers({
       "access-control-request-headers": "*",
       "apiKey": this.#apiKey,
       "content-type": "application/json"
     });
-    this.#cluster = options.cluster;
+    this.cluster = options.cluster;
 
     if ("defaultDatabase" in options) this.defaultDb = options.defaultDatabase;
   }
 
   async findOne<T extends Document>(options: { db: string; collection: string; filter: Filter<T>; projection?: Document }): Promise<T | undefined> {
     const data = {
-      dataSource: this.#cluster,
+      dataSource: this.cluster,
       database: options.db,
       collection: options.collection,
       filter: options.filter,
       projection: options.projection
     };
 
-    const request = await fetch(this.#baseUrl + "/action/findOne", {
+    const request = await fetch(this.baseUrl + "/action/findOne", {
       headers: this.#baseHeaders,
       method: "POST",
       body: JSON.stringify(data)
@@ -51,7 +51,7 @@ export class Client {
 
   async find<T extends Document>(options: { db: string; collection: string; filter: Filter<T>; projection?: Document; sort?: Document; limit?: number; skip?: number }): Promise<T[]> {
     const data = {
-      dataSource: this.#cluster,
+      dataSource: this.cluster,
       database: options.db,
       collection: options.collection,
       filter: options.filter,
@@ -61,7 +61,7 @@ export class Client {
       skip: options.skip
     };
 
-    const request = await fetch(this.#baseUrl + "/action/find", {
+    const request = await fetch(this.baseUrl + "/action/find", {
       headers: this.#baseHeaders,
       method: "POST",
       body: JSON.stringify(data)
