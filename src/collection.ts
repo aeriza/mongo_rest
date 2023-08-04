@@ -39,6 +39,7 @@ export class Collection<T extends Document> {
     path: string, 
     data: unknown
   ): Promise<any> {
+    console.log(data);
     const rawData: BaseRequestBody = {
       dataSource: this.#client.cluster,
       database: this.#dbName,
