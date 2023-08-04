@@ -15,7 +15,7 @@ export class Client {
   #baseHeaders: Headers;
   #baseUrl: string;
   #cluster: string;
-  readonly defaultDb: string;
+  readonly defaultDb?: string;
   
   constructor(options: ClientOptions) {
     this.#apiKey = options.apiKey;
@@ -26,7 +26,8 @@ export class Client {
       "content-type": "application/json"
     });
     this.#cluster = options.cluster;
-    this.defaultDb = options.defaultDatabase;
+
+    if ("defaultDatabase" in options) this.defaultDb = options.defaultDatabase;
   }
 
   async findOne<T extends Document>(options: { db: string; collection: string; filter: Filter<T>; projection?: Document }): Promise<T | undefined> {
