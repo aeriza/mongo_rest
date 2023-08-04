@@ -65,11 +65,9 @@ export class Collection<T extends Document> {
   }
 
   async findMany(filter: Filter<T>, options?: FindOptions): Promise<T[]> {
-    const data = await this.#request("findMany", {
-      filter, projection, skip: options.skip, limit: options.limit, projection: options.projection
-    });
+    const data = await this.#request("findMany", Object.assign(filter, options));
 
-    return data.documents;
+    return data.documents as T[];
   }
 
   async findOne(filter: Filter<T>, projection?: Document): Promise<T | null> {
