@@ -25,6 +25,12 @@ export class Collection<T extends Document> {
     path: string, 
     data: unknown
   ): Promise<any> {
+    const rawData = {
+      dataSource: this.#client.cluster,
+      database: this.dbName,
+      collection: this.name
+    }
+    
     const request = await fetch(`${this.#client.baseUrl}/action/${path}`, {
       headers: new Headers({
         "access-control-request-headers": "*",
@@ -32,7 +38,7 @@ export class Collection<T extends Document> {
         "content-type": "application/json"
       }),
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(Object.assign(rawData, data))
     });
 
     const response = await request.json();
