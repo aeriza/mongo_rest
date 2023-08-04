@@ -10,6 +10,6 @@ const client = new Client({
 
 const collection = client.createCollection("test", "coll");
 const document = await collection.findOne(
-  { _id: 0 }
+  { _id: 1 }
 );
 console.log(document);
