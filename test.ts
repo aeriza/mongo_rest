@@ -8,7 +8,7 @@ const client = new Client({
   apiKey: Deno.env.get("MONGO_API_KEY")!
 });
 
-const collection = client.createCollection("test", "coll");
+const collection = client.createCollection("akane", "sponsors");
 const document = await collection.findOne(
   { _id: 0 }
 );
