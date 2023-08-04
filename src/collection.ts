@@ -34,8 +34,8 @@ export class Collection<T extends Document> {
   ): Promise<any> {
     const rawData: BaseRequestBody = {
       dataSource: this.#client.cluster,
-      database: this.dbName,
-      collection: this.name
+      database: this.#dbName,
+      collection: this.#name
     }
     
     const request = await fetch(`${this.#client.baseUrl}/action/${path}`, {
