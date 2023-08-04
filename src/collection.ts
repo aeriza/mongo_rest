@@ -2,7 +2,8 @@ import type {
   Client
 } from "./client.ts";
 import type {
-  Document
+  Document,
+  Filter
 } from "../deps.ts";
 
 export interface BaseRequestBody {
@@ -54,5 +55,13 @@ export class Collection<T extends Document> {
     }
 
     return response;
+  }
+
+  async findOne(filter: Filter<T>, projection: Document): Promise<T | null> {
+    const data = await this.#request("/findOne", {
+      filter, projection
+    });
+
+    return data.document ?? null;
   }
 }
