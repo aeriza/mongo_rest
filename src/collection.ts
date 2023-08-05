@@ -17,13 +17,6 @@ export interface CreateCollectionOptions {
   name: string;
 }
 
-export interface FindOptions {
-  skip?: number;
-  limit?: number;
-  projection?: Document;
-  sort?: Document;
-}
-
 export class Collection<T extends Document> {
   #client: Client;
   #dbName: string;
@@ -64,7 +57,7 @@ export class Collection<T extends Document> {
     return response;
   }
 
-  async findMany(filter: Filter<T>, options?: FindOptions): Promise<T[]> {
+  async findMany(filter: Filter<T>, options?: Omit<FindOptions, "updateOne", "noCursorTimeout", "maxTimeMS">): Promise<T[]> {
     const data = await this.#request("find", Object.assign({ filter }, options));
 
     return data.documents;
