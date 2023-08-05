@@ -58,7 +58,7 @@ export class Collection<T extends Document> {
     return response;
   }
 
-  async findMany(filter: Filter<T>, options?: Omit<FindOptions, "updateOne", "noCursorTimeout", "maxTimeMS">): Promise<T[]> {
+  async findMany(filter: Filter<T>, options?: Omit<FindOptions, "updateOne" | "noCursorTimeout" | "maxTimeMS">): Promise<T[]> {
     const data = await this.#request("find", Object.assign({ filter }, options));
 
     return data.documents;
