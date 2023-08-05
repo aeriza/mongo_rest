@@ -3,7 +3,8 @@ import type {
 } from "./client.ts";
 import type {
   Document,
-  Filter
+  Filter,
+  FindOptions
 } from "../deps.ts";
 
 export interface BaseRequestBody {
