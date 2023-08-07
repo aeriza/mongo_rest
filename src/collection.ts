@@ -4,7 +4,9 @@ import type {
 import type {
   Document,
   Filter,
-  FindOptions
+  FindOptions,
+  InsertDocument,
+  ObjectId
 } from "../deps.ts";
 
 export interface BaseRequestBody {
@@ -58,15 +60,27 @@ export class Collection<T extends Document> {
     return response;
   }
 
-  async findMany(filter: Filter<T>, options?: Omit<FindOptions, "updateOne" | "noCursorTimeout" | "maxTimeMS">): Promise<T[]> {
+  async findMany(
+    filter: Filter<T>,
+    options?: Omit<FindOptions, "updateOne" | "noCursorTimeout" | "maxTimeMS">
+  ): Promise<T[]> {
     const data = await this.#request("find", Object.assign({ filter }, options));
 
     return data.documents;
   }
 
-  async findOne(filter: Filter<T>, projection?: Document): Promise<T | null> {
+  async findOne(
+    filter: Filter<T>,
+    projection?: Document
+  ): Promise<T | null> {
     const documents = await this.findMany(filter, { projection });
 
     return documents[0] ?? null;
+  }
+
+  async insertMany(docs: T[]): Promise<(Required<InsertDocument<T>> | ObjectId)[]> {
+    const data = await this.#request("insertMany", { documents: docs });
+
+    return data.insertedIds;
   }
 }
