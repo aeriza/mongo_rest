@@ -83,4 +83,10 @@ export class Collection<T extends Document> {
 
     return data.insertedIds;
   }
+  
+  async insertOne(doc: T:): Promise<Required<InsertDocument<T>> | ObjectId> {
+    const data = await this.insertMany([doc]);
+
+    return data.insertedIds[0];
+  }
 }
