@@ -4,10 +4,13 @@ import type {
 import type {
   Document,
   Filter,
-  FindOptions,
   InsertDocument,
   ObjectId
 } from "../deps.ts";
+
+import type {
+  FindOptions
+} from "./types.d.ts";
 
 export interface BaseRequestBody {
   dataSource: string;
