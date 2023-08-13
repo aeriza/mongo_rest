@@ -15,8 +15,11 @@ export interface ClientOptions {
 
 export class Client {
   #baseHeaders: Headers;
+  /** Used as authorization request */
   readonly apiKey: string;
+  /** Mongo URL from your database */
   readonly baseUrl: string;
+  /** Cluster name from your mongo atlas (e.g. cluster0) */
   readonly cluster: string;
   readonly defaultDb?: string;
   
@@ -33,6 +36,11 @@ export class Client {
     if ("defaultDatabase" in options) this.defaultDb = options.defaultDatabase;
   }
 
+  /**
+   * Create a new collection to modify database contents
+   * @param database The name of the database that you want to modify
+   * @param name The collection name of the database that you want to modify 
+   */
   createCollection<T extends Document>(database: string, name: string): Collection<T> {
     return new Collection<T>(this, {
       dbName: database,
