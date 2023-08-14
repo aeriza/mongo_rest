@@ -94,9 +94,9 @@ export class Collection<T extends Document> {
     filter: Filter<T>,
     projection?: Document
   ): Promise<T | null> {
-    const document = await this.#request("findOne", { filter, projection });
+    const { document = null } = await this.#request("findOne", { filter, projection });
 
-    return document ?? null;
+    return document;
   }
 
   /**
@@ -116,8 +116,8 @@ export class Collection<T extends Document> {
   async insertOne(
     doc: InsertDocument<T>
   ): Promise<Required<InsertDocument<T>> | ObjectId> {
-    const { document } = await this.#request("insertOne", { document: doc });
+    const { insertedId = null } = await this.#request("insertOne", { document: doc });
 
-    return document ?? null;
+    return insertedId;
   }
 }
