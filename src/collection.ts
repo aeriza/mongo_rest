@@ -116,8 +116,8 @@ export class Collection<T extends Document> {
   async insertOne(
     doc: InsertDocument<T>
   ): Promise<Required<InsertDocument<T>> | ObjectId> {
-    const data = await this.#request("insertOne", { document: doc });
+    const { document = null } = await this.#request("insertOne", { document: doc });
 
-    return data[0];
+    return document;
   }
 }
