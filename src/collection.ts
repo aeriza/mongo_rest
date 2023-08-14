@@ -18,17 +18,26 @@ export interface BaseRequestBody {
   collection: string;
 }
 
+/**
+ * Options for collection creation
+ */
 export interface CreateCollectionOptions {
   dbName: string;
   name: string;
 }
 
+/**
+ * Collection class to easily manage database contents
+ */
 export class Collection<T extends Document> {
   #client: Client;
   #dbName: string;
   #name: string;
 
-  constructor(client: Client, options: CreateCollectionOptions) {
+  constructor(
+    client: Client,
+    options: CreateCollectionOptions
+  ) {
     this.#client = client;
     this.#dbName = options.dbName
     this.#name = options.name;
@@ -63,6 +72,11 @@ export class Collection<T extends Document> {
     return response;
   }
 
+  /** 
+   * Search multiple documents with appropriate filters
+   * @param filter Filter to find documents
+   * @param options Additional options for pagination of search results
+   */
   async findMany(
     filter: Filter<T>,
     options?: Omit<FindOptions, "updateOne" | "noCursorTimeout" | "maxTimeMS">
@@ -72,15 +86,22 @@ export class Collection<T extends Document> {
     return data.documents;
   }
 
+  /**
+   * Search for document with the appropriate filter
+   * @param filter Filter to find documents
+   */
   async findOne(
     filter: Filter<T>,
     projection?: Document
   ): Promise<T | null> {
-    const documents = await this.findMany(filter, { projection });
+    const document = await this.#request("findOne", { filter, projection });
 
-    return documents[0] ?? null;
+    return document ?? null;
   }
 
+  /**
+   * Insert many new documents in the database
+   */
   async insertMany(
     docs: InsertDocument<T>[]
   ): Promise<(Required<InsertDocument<T>> | ObjectId)[]> {
@@ -88,11 +109,14 @@ export class Collection<T extends Document> {
 
     return data.insertedIds;
   }
-  
+
+  /**
+   * Insert new document in the database
+   */
   async insertOne(
     doc: InsertDocument<T>
   ): Promise<Required<InsertDocument<T>> | ObjectId> {
-    const data = await this.insertMany([doc]);
+    const data = await this.#request("insertOne", { document: doc });
 
     return data[0];
   }
