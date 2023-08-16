@@ -9,22 +9,10 @@ import type {
 } from "../deps.ts";
 
 import type {
-  FindOptions
+  CollectionOptions,
+  FindOptions,
+  RequestBody
 } from "./types.d.ts";
-
-export interface BaseRequestBody {
-  dataSource: string;
-  database: string;
-  collection: string;
-}
-
-/**
- * Options for collection creation
- */
-export interface CreateCollectionOptions {
-  dbName: string;
-  name: string;
-}
 
 /**
  * Collection class to easily manage database contents
@@ -36,7 +24,7 @@ export class Collection<T extends Document> {
 
   constructor(
     client: Client,
-    options: CreateCollectionOptions
+    options: CollectionOptions = {}
   ) {
     this.#client = client;
     this.#dbName = options.dbName
@@ -47,7 +35,7 @@ export class Collection<T extends Document> {
     path: string, 
     data: unknown
   ): Promise<any> {
-    const rawData: BaseRequestBody = {
+    const rawData: RequestBody = {
       dataSource: this.#client.cluster,
       database: this.#dbName,
       collection: this.#name
@@ -81,9 +69,8 @@ export class Collection<T extends Document> {
     filter: Filter<T>,
     options?: Omit<FindOptions, "updateOne" | "noCursorTimeout" | "maxTimeMS">
   ): Promise<T[]> {
-    const data = await this.#request("find", Object.assign({ filter }, options));
-
-    return data.documents;
+    const { documents = [] } = await this.#request("find", Object.assign({ filter }, options));
+    return documents;
   }
 
   /**
@@ -95,29 +82,22 @@ export class Collection<T extends Document> {
     projection?: Document
   ): Promise<T | null> {
     const { document = null } = await this.#request("findOne", { filter, projection });
-
     return document;
   }
 
   /**
    * Insert many new documents in the database
    */
-  async insertMany(
-    docs: InsertDocument<T>[]
-  ): Promise<(Required<InsertDocument<T>>["_id"] | ObjectId)[]> {
-    const { insertedIds = [] } = await this.#request("insertMany", { documents: docs });
-
+  async insertMany(documents: InsertDocument<T>[]): Promise<(Required<InsertDocument<T>>["_id"] | ObjectId)[]> {
+    const { insertedIds = [] } = await this.#request("insertMany", { documents });
     return insertedIds;
   }
 
   /**
    * Insert new document in the database
    */
-  async insertOne(
-    doc: InsertDocument<T>
-  ): Promise<Required<InsertDocument<T>>["_id"] | ObjectId> {
-    const { insertedId = null } = await this.#request("insertOne", { document: doc });
-
+  async insertOne(document: InsertDocument<T>): Promise<Required<InsertDocument<T>>["_id"] | ObjectId> {
+    const { insertedId = null } = await this.#request("insertOne", { document });
     return insertedId;
   }
 }
