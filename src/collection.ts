@@ -24,7 +24,7 @@ export class Collection<T extends Document> {
 
   constructor(
     client: Client,
-    options: CollectionOptions = {}
+    options: CollectionOptions
   ) {
     this.#client = client;
     this.#dbName = options.dbName
