@@ -104,7 +104,7 @@ export class Collection<T extends Document> {
    */
   async insertMany(
     docs: InsertDocument<T>[]
-  ): Promise<(Required<InsertDocument<T>> | ObjectId)[]> {
+  ): Promise<(Required<InsertDocument<T>>["_id"] | ObjectId)[]> {
     const { insertedIds = [] } = await this.#request("insertMany", { documents: docs });
 
     return insertedIds;
@@ -115,7 +115,7 @@ export class Collection<T extends Document> {
    */
   async insertOne(
     doc: InsertDocument<T>
-  ): Promise<Required<InsertDocument<T>> | ObjectId> {
+  ): Promise<Required<InsertDocument<T>>["_id"] | ObjectId> {
     const { insertedId = null } = await this.#request("insertOne", { document: doc });
 
     return insertedId;
