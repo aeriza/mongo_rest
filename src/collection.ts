@@ -5,13 +5,15 @@ import type {
   Document,
   Filter,
   InsertDocument,
-  ObjectId
+  ObjectId,
+  UpdateOptions
 } from "../deps.ts";
 
 import type {
   CollectionOptions,
   FindOptions,
-  RequestBody
+  RequestBody,
+  UpdateResult
 } from "./types.d.ts";
 
 /**
@@ -67,7 +69,7 @@ export class Collection<T extends Document> {
    */
   async findMany(
     filter: Filter<T>,
-    options?: Omit<FindOptions, "updateOne" | "noCursorTimeout" | "maxTimeMS">
+    options?: FindOptions = {}
   ): Promise<T[]> {
     const { documents = [] } = await this.#request("find", Object.assign({ filter }, options));
     return documents;
@@ -85,19 +87,35 @@ export class Collection<T extends Document> {
     return document;
   }
 
-  /**
-   * Insert many new documents in the database
-   */
+  /** Insert many new documents in the database */
   async insertMany(documents: InsertDocument<T>[]): Promise<(Required<InsertDocument<T>>["_id"] | ObjectId)[]> {
     const { insertedIds = [] } = await this.#request("insertMany", { documents });
     return insertedIds;
   }
 
-  /**
-   * Insert new document in the database
-   */
+  /** Insert new document in the database */
   async insertOne(document: InsertDocument<T>): Promise<Required<InsertDocument<T>>["_id"] | ObjectId> {
     const { insertedId = null } = await this.#request("insertOne", { document });
     return insertedId;
+  }
+
+  /** Modify the document according to the filter */
+  async updateMany(
+    filter: Filter<T>,
+    update: UpdateOperators<T>,
+    { upsert = false }: UpdateOptions = {}
+  ): Promise<UpdateResult> {
+    const { matchedCount = 0, modifiedCount = 0 } = await this.#request("updateMany", { filter, update, upsert });
+    return { matchedCount, modifiedCount };
+  }
+
+  /** Modify many documents according to the filter */
+  async updateOne(
+    filter: Filter<T>,
+    update: UpdateOperators<T>,
+    { upsert = false }: UpdateOptions = {}
+  ): Promise<UpdateResult> {
+    const { matchedCount = 0, modifiedCount = 0 } = await this.#request("updateOne", { filter, update, upsert });
+    return { matchedCount, modifiedCount };
   }
 }
