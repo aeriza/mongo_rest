@@ -9,7 +9,9 @@ const client = new Client({
 });
 
 const collection = client.createCollection("test", "coll");
-const document = await collection.findOne(
-  { _id: 1 }
+const modified = await collection.updateOne(
+  { _id: 1 },
+  { $set: { date: Date.now() } },
+  { upsert: true }
 );
-console.log(document);
+console.log(modified);
