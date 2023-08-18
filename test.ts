@@ -11,7 +11,6 @@ const client = new Client({
 const collection = client.createCollection("test", "coll");
 const modified = await collection.updateOne(
   { _id: 1 },
-  { $set: { date: Date.now() } },
-  { upsert: true }
+  { $set: { date: Date.now() } }
 );
 console.log(modified);
