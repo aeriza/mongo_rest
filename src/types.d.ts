@@ -37,3 +37,10 @@ export interface UpdateOptions {
    */
   upsert?: boolean;
 }
+
+export interface UpdateResult {
+  /** The number of documents that fit the filter */
+  matchedCount: number;
+  /** Number of documents modified */
+  modifiedCount: number;
+}
