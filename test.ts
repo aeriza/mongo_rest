@@ -10,7 +10,6 @@ const client = new Client({
 
 const collection = client.createCollection("test", "coll");
 const inserted = await collection.insertOne(
-  { _id: 2 },
-  { date: Date.now() }
+  { _id: 2, date: Date.now() }
 );
 console.log(inserted);
