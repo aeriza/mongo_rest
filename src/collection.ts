@@ -6,13 +6,14 @@ import type {
   Filter,
   InsertDocument,
   ObjectId,
-  UpdateOptions
+  UpdateOperators
 } from "../deps.ts";
 
 import type {
   CollectionOptions,
   FindOptions,
   RequestBody,
+  UpdateOptions,
   UpdateResult
 } from "./types.d.ts";
 
@@ -69,7 +70,7 @@ export class Collection<T extends Document> {
    */
   async findMany(
     filter: Filter<T>,
-    options?: FindOptions = {}
+    options?: FindOptions
   ): Promise<T[]> {
     const { documents = [] } = await this.#request("find", Object.assign({ filter }, options));
     return documents;
