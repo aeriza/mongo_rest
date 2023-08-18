@@ -29,3 +29,11 @@ export interface FindOptions {
   skip?: number;
   sort?: Document;
 }
+
+export interface UpdateOptions {
+  /**
+   * When true, creates a new document if no document matches the query.
+   * @default {false}
+   */
+  upsert?: boolean;
+}
