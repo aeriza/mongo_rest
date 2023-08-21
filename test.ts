@@ -4,7 +4,7 @@ import {
 
 const client = new Client({
   cluster: "Cluster0",
-  baseUrl: Deno.env.get("MONGO_API_URL")!,
+  baseUrl: "https://data.mongodb-api.com/app/data-qjmlk/endpoint/data/v1",
   apiKey: Deno.env.get("MONGO_API_KEY")!
 });
 
